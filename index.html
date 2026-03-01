@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoicer - GST Invoice Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --border: rgba(255,255,255,0.07);
+            --gold: #c9a84c;
+            --gold-light: #e4c67a;
+            --gold-dim: rgba(201,168,76,0.15);
+            --text: #f0ede8;
+            --text-muted: rgba(240,237,232,0.45);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+
+        .topbar-badge {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+
+        /* Hero */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .hero-title em {
+            color: var(--gold-light);
+            font-style: italic;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 450px;
+            margin-bottom: 60px;
+        }
+
+        /* Cards */
+        .cards {
+            display: flex;
+            gap: 50px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 320px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 36px 30px;
+            text-decoration: none;
+            color: var(--text);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(201,168,76,0.4);
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .card-arrow {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 25px 60px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 700px) {
+            .topbar, .footer { padding: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <a href="home.html" class="logo">
+            <span class="logo-text">Invoicer</span>
+        </a>
+        <div class="topbar-badge">GST Suite</div>
+    </header>
+
+    <!-- Hero -->
+    <main class="hero">
+        <h1 class="hero-title">
+            Create <em>Elegant</em><br>Invoices Instantly
+        </h1>
+
+        <p class="hero-subtitle">
+            Professional GST invoice generation system with automatic calculations,
+            PDF download, and secure access.
+        </p>
+
+        <div class="cards">
+
+            <!-- GST Fixed -->
+            <a href="login.html" class="card">
+                <div class="card-title">GST Fixed</div>
+                <div class="card-desc">
+                    Pre-configured CGST & SGST (9% + 9%). Ideal for Indian business invoicing.
+                </div>
+                <div class="card-arrow">Open Template →</div>
+            </a>
+
+            <!-- Editable -->
+            <a href="#" class="card">
+                <div class="card-title">Fully Editable</div>
+                <div class="card-desc">
+                    Advanced invoice editor with customizable tax structure.
+                </div>
+                <div class="card-arrow">Coming Soon →</div>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2026 Invoicer · Professional GST Billing System
+    </footer>
+
+</div>
+
+<script>
+/* Optional: Auto redirect if already logged in */
+if(localStorage.getItem("isLoggedIn") === "true"){
+    // If user already logged in, send directly to form
+    // Comment this if you don't want auto redirect
+    // window.location.href = "template1-form.html";
+}
+</script>
+
+</body>
+</html>

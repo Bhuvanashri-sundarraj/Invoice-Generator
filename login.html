@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - GST Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface-2: #16161f;
+            --border: rgba(255,255,255,0.07);
+            --border-focus: rgba(201,168,76,0.5);
+            --gold: #c9a84c;
+            --gold-light: #e4c67a;
+            --text: #f0ede8;
+            --text-muted: rgba(240,237,232,0.45);
+            --error: #e07070;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            padding: 22px 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--text);
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .card-title em {
+            color: var(--gold-light);
+        }
+
+        .card-body {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        input {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            color: var(--text);
+            padding: 10px 12px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--border-focus);
+        }
+
+        button {
+            width: 100%;
+            background: var(--gold);
+            border: none;
+            color: #000;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--gold-light);
+        }
+
+        .error {
+            margin-top: 12px;
+            color: var(--error);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .card-footer {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .card-footer a {
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @media(max-width:500px){
+            .topbar{ padding:18px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <a href="home.html" class="logo">Invoicer</a>
+</header>
+
+<main class="main">
+    <div class="card">
+
+        <h1 class="card-title">Welcome <em>Back</em></h1>
+
+        <div class="card-body">
+            <form onsubmit="return loginUser(event)">
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+
+                <button type="submit">Sign In</button>
+            </form>
+
+            <div class="error" id="errorMsg"></div>
+        </div>
+
+        <div class="card-footer">
+            <a href="forgot-password.html">Forgot Password?</a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    © 2026 Invoicer · Secure Login
+</footer>
+
+<script>
+/* ===== SESSION PROTECTION ===== */
+
+// If already logged in → skip login
+if(localStorage.getItem("isLoggedIn") === "true"){
+    window.location.href = "template1-form.html";
+}
+
+/* ===== DEMO USER ===== */
+const USER = {
+    username: "SKBchem",
+    password: "Skb151275",
+    securityAnswer: "Maggie"
+};
+
+/* ===== LOGIN FUNCTION ===== */
+function loginUser(e){
+    e.preventDefault();
+
+    const u = document.getElementById("username").value.trim();
+    const p = document.getElementById("password").value.trim();
+
+    if(u === USER.username && p === USER.password){
+
+        localStorage.setItem("isLoggedIn","true");
+
+        window.location.href = "template1-form.html";
+
+    } else {
+        document.getElementById("errorMsg").innerText = "Invalid Username or Password";
+    }
+
+    return false;
+}
+</script>
+
+</body>
+</html>

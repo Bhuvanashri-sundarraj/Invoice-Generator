@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Invoice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body {
+    font-family: "Times New Roman", serif;
+    background: #f0ede6;
+    margin: 0;
+    padding: 30px 20px 60px;
+}
+
+/* DOWNLOAD BUTTON */
+.download-bar {
+    max-width: 210mm;
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-download {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    cursor: pointer;
+}
+
+/* A4 PAPER */
+.a4 {
+    width: 190mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 10mm;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    font-family: "Times New Roman", serif;
+}
+
+table, td, th {
+    border: 1px solid #000;
+}
+
+td, th {
+    padding: 5px 7px;
+    vertical-align: top;
+}
+
+/* HEADER ROW */
+.invoice-title-row td {
+    letter-spacing: 0.18em;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ITEMS HEADER */
+.items-header-row th {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 7px;
+}
+
+/* SUBTOTAL + GRAND */
+.subtotal-row td {
+    font-weight: normal;
+}
+
+.grandtotal-row td {
+    font-weight: bold;
+}
+
+/* WORDS */
+.words-label td {
+    font-size: 11px;
+}
+
+.words-value td {
+    font-size: 12.5px;
+}
+
+/* BANK */
+.bank-row td {
+    font-size: 11.5px;
+    line-height: 1.7;
+}
+
+/* TERMS */
+.terms-row td {
+    font-size: 11px;
+    line-height: 1.65;
+}
+
+/* SIGNATURE */
+.signature {
+    height: 80px;
+}
+
+.center { text-align: center; }
+.right { text-align: right; }
+.bold { font-weight: bold; }
+
+@media print {
+    .download-bar { display: none; }
+    body { margin: 0; }
+    .a4 { width: 100%; margin: 0; padding: 8mm; }
+    @page { size: A4; margin: 0; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="download-bar">
+<button class="btn-download" onclick="window.print()">Download PDF</button>
+</div>
+
+<div class="a4">
+<table>
+
+<tr class="invoice-title-row">
+<td colspan="6" class="center">INVOICE</td>
+<td colspan="2" class="right bold" id="copyType"></td>
+</tr>
+
+<tr>
+<td colspan="4">
+<b>ESKAY CHEMICALS & FOODS</b><br>
+2/209, RKV NAGAR,<br>
+THEETHIPALAYAM (PO),<br>
+COIMBATORE - 641 010<br>
+<b>GSTIN :</b> 33BJZPS9366N1ZT<br>
+<b>PAN :</b> BJZPS9366N
+</td>
+
+<td colspan="2">
+<b>Invoice No.</b><br>
+<span id="invoiceNumber"></span>
+<hr>
+<b>Buyer's Order No.</b><br>
+PHONE
+</td>
+
+<td colspan="2">
+<b>Dated.</b><br>
+<span id="invoiceDate"></span>
+<hr>
+<b>Dated.</b><br>
+<span id="buyerOrderDate"></span>
+</td>
+</tr>
+
+<tr>
+<td colspan="4">
+Buyer<br>
+<b id="buyerName"></b><br>
+<span id="addr1"></span><br>
+<span id="addr2"></span><br>
+<span id="addr3"></span><br>
+<b>GSTIN :</b> <span id="buyerGstin"></span><br>
+<b>PAN :</b> <span id="buyerPan"></span>
+</td>
+
+<td colspan="4">
+<b>Mode/Terms of Payment:</b> Credit
+<br><hr><br>
+<b>Dispatched Through:</b> Direct
+</td>
+</tr>
+
+<tr class="items-header-row">
+<th class="center">SL NO</th>
+<th>Description of Goods</th>
+<th class="center">HSN</th>
+<th class="center">Quantity</th>
+<th class="center">Rate</th>
+<th class="center">Per</th>
+<th class="center" colspan="2">Amount</th>
+</tr>
+
+<tbody id="itemsBody"></tbody>
+
+<tr class="subtotal-row">
+<td colspan="3"></td>
+<td class="center bold" id="totalWeight"></td>
+<td colspan="2" class="center bold">TOTAL</td>
+<td class="right bold" colspan="2" id="totalAmount"></td>
+</tr>
+
+<tr>
+<td colspan="6"><b>CGST @ 9%</b></td>
+<td class="right" colspan="2" id="cgst"></td>
+</tr>
+
+<tr>
+<td colspan="6"><b>SGST @ 9%</b></td>
+<td class="right" colspan="2" id="sgst"></td>
+</tr>
+
+<tr class="grandtotal-row">
+<td colspan="6">TOTAL</td>
+<td class="right" colspan="2" id="grandTotal"></td>
+</tr>
+
+<tr class="words-label">
+<td colspan="8">Amount Chargeable (in words)</td>
+</tr>
+
+<tr class="words-value">
+<td colspan="8">
+<b>Rupees:</b> <span id="amountWords"></span>
+</td>
+</tr>
+
+<tr class="bank-row">
+<td colspan="8">
+<b>Company Bank Details</b><br>
+<b>Bank Name and Branch : South Indian Bank / Theethipalayam</b><br>
+<b>A/C No               : 0734 073 000 000 006</b><br>
+<b>IFSC Code            : SIBL000734</b>
+</td>
+</tr>
+
+<tr class="terms-row">
+<td colspan="8">
+<b>Terms and Condition:</b><br>
+<b>1.</b> Product suitability to be tested prior to production<br>
+<b>2.</b> Customer are requested to check the labels and weight before delivery any rejection or discrepancies is to be informed within 48 hours from the date of delivery<br>
+<b>3.</b> Delivery at godown.<br>
+<b>4.</b> Payment by A/C payee cheque/NEFT/RTGS in favor of SK CHEMICALS.<br>
+<b>5.</b> Interest at 18% will be charged on all overdue accounts.<br>
+<b>6.</b> Subject to Coimbatore jurisdiction.
+</td>
+</tr>
+
+<tr>
+<td colspan="8" class="right signature">
+<b>For ESKAY CHEMICALS</b><br><br><br><br>
+<b>Authorized Signatory</b>
+</td>
+</tr>
+
+</table>
+</div>
+
+<script>
+const data = JSON.parse(localStorage.getItem("invoiceData"));
+
+if(!data){
+alert("No Invoice Data Found");
+}
+
+document.getElementById("copyType").innerText = data.copyType;
+document.getElementById("invoiceNumber").innerText = data.invoiceNumber;
+function formatDate(dateString){
+    const parts = dateString.split("-");
+    return parts[2] + "/" + parts[1] + "/" + parts[0];
+}
+
+document.getElementById("invoiceDate").innerText = formatDate(data.invoiceDate);
+document.getElementById("buyerOrderDate").innerText = formatDate(data.buyerOrderDate);
+
+document.getElementById("buyerName").innerText = data.buyerName;
+document.getElementById("addr1").innerText = data.buyerAddressLine1;
+document.getElementById("addr2").innerText = data.buyerAddressLine2;
+document.getElementById("addr3").innerText = data.buyerAddressLine3;
+document.getElementById("buyerGstin").innerText = data.buyerGstin;
+document.getElementById("buyerPan").innerText = data.buyerPan;
+
+let totalWeight = 0;
+let subtotal = 0;
+let html = "";
+
+data.items.forEach((item,index)=>{
+let qty = parseFloat(item.quantity);
+let rate = parseFloat(item.rate);
+let amount = qty * rate;
+
+totalWeight += qty;
+subtotal += amount;
+
+html += `
+<tr>
+<td class="center">${index+1}</td>
+<td>${item.description}</td>
+<td class="center">3215</td>
+<td class="center">${qty.toFixed(2)} Kg</td>
+<td class="center">${rate.toFixed(2)}</td>
+<td class="center">Kg</td>
+<td class="right" colspan="2">${amount.toFixed(2)}</td>
+</tr>
+`;
+});
+
+document.getElementById("itemsBody").innerHTML = html;
+
+let cgst = subtotal * 0.09;
+let sgst = subtotal * 0.09;
+let grand = subtotal + cgst + sgst;
+
+document.getElementById("totalWeight").innerText = totalWeight.toFixed(2) + " Kg";
+document.getElementById("totalAmount").innerText = subtotal.toFixed(2);
+document.getElementById("cgst").innerText = cgst.toFixed(2);
+document.getElementById("sgst").innerText = sgst.toFixed(2);
+document.getElementById("grandTotal").innerText = grand.toFixed(2);
+document.getElementById("amountWords").innerText = numberToWords(grand);
+
+function numberToWords(num) {
+
+num = Math.round(num);
+
+if (num === 0) return "Zero Only";
+
+const ones = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine"];
+const teens = ["Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+const tens = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+
+function convertHundreds(n){
+let str = "";
+
+if(n > 99){
+str += ones[Math.floor(n/100)] + " Hundred ";
+n = n % 100;
+}
+
+if(n > 19){
+str += tens[Math.floor(n/10)] + " ";
+n = n % 10;
+}
+
+if(n >= 10 && n <= 19){
+str += teens[n-10] + " ";
+return str;
+}
+
+if(n > 0){
+str += ones[n] + " ";
+}
+
+return str;
+}
+
+let result = "";
+
+if(num >= 100000){
+result += convertHundreds(Math.floor(num/100000)) + "Lakh ";
+num = num % 100000;
+}
+
+if(num >= 1000){
+result += convertHundreds(Math.floor(num/1000)) + "Thousand ";
+num = num % 1000;
+}
+
+if(num > 0){
+result += convertHundreds(num);
+}
+
+return result.trim() + " Only";
+}
+</script>
+
+</body>
+</html>
